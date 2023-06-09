@@ -1,19 +1,50 @@
+using Confluent.Kafka;
+
 namespace Consumer
 {
     public class ConsumerService(ILogger<ConsumerService> logger) : BackgroundService
     {
+        ConsumerConfig consumerConfig = new ConsumerConfig
+        {
+            GroupId = "test-consumer-group",//группа подписчка. Одинаковые сообщения распараллеливаются по подписчикам внутри группы
+            BootstrapServers = "broker:29092",
+            AutoOffsetReset = AutoOffsetReset.Earliest
+        };
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            logger.LogInformation("Started");
+
+            using (var consumer = new ConsumerBuilder<string, string>(consumerConfig).Build())
             {
-                logger.LogInformation("Work: {time}", DateTimeOffset.Now);
+                consumer.Subscribe("Kafka-Topic-Sample1");//Подписка на топик
 
+                try
+                {
+                    while (!stoppingToken.IsCancellationRequested)
+                    {
+                        await Task.Delay(600, stoppingToken);
+                        try
+                        {
+                            var cr = consumer.Consume(stoppingToken);
 
-                await Task.Delay(1000, stoppingToken);
-
-
-
+                            logger.LogInformation($"[Consumed1] Topic: {cr.Topic} [{cr.Key} : {cr.Value}] (Partition: {cr.Partition.Value}, Offset: {cr.Offset.Value})");
+                        }
+                        catch (ConsumeException e)
+                        {
+                            logger.LogError($"Error occured: {e.Error.Reason}");
+                        }
+                    }
+                }
+                catch (OperationCanceledException) // Ensure the consumer leaves the group cleanly and final offsets are committed.
+                {
+                    consumer.Close();
+                }
             }
         }
+
+
+
+
     }
 }
