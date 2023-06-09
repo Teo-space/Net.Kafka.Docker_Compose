@@ -6,7 +6,8 @@ namespace Producer
     {
         ProducerConfig producerConfig = new ProducerConfig
         {
-            BootstrapServers = "broker:29092",
+            BootstrapServers = "kafka:29092",
+            //BootstrapServers = "localhost:9092",
         };
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

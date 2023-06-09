@@ -6,8 +6,12 @@ namespace Consumer
     {
         ConsumerConfig consumerConfig = new ConsumerConfig
         {
-            GroupId = "test-consumer-group",//группа подписчка. Одинаковые сообщения распараллеливаются по подписчикам внутри группы
-            BootstrapServers = "broker:29092",
+            //группа подписчка. Одинаковые сообщения распараллеливаются по подписчикам внутри группы
+            GroupId = "test-consumer-group",
+
+            BootstrapServers = "kafka:29092",
+            //BootstrapServers = "localhost:9092",
+
             AutoOffsetReset = AutoOffsetReset.Earliest
         };
 
