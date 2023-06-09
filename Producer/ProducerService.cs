@@ -6,7 +6,7 @@ namespace Producer
     {
         ProducerConfig producerConfig = new ProducerConfig
         {
-            BootstrapServers = "kafka:29092",
+            BootstrapServers = "broker:29092",
             //BootstrapServers = "localhost:9092",
         };
 
