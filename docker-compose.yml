@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+##############################################################################
+    producer:
+        image: ${DOCKER_REGISTRY-}producer
+        build:
+            context: .
+            dockerfile: Producer/Dockerfile
+##############################################################################
+    consumer:
+        image: ${DOCKER_REGISTRY-}consumer
+        build:
+            context: .
+            dockerfile: Consumer/Dockerfile
+##############################################################################
+
+
+
