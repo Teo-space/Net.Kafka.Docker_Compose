@@ -30,9 +30,11 @@ namespace Consumer
                         await Task.Delay(600, stoppingToken);
                         try
                         {
-                            var cr = consumer.Consume(stoppingToken);
+                            var consumeResult = consumer.Consume(stoppingToken);
+                            var m = consumeResult.Message;
 
-                            logger.LogInformation($"[Consumed1] Topic: {cr.Topic} [{cr.Key} : {cr.Value}] (Partition: {cr.Partition.Value}, Offset: {cr.Offset.Value})");
+                            logger.LogInformation($@"[Consumed1] Topic: {consumeResult.Topic} [{m.Key} : {m.Value}] 
+(Partition: {consumeResult.Partition}, Offset: {consumeResult.Offset})");
                         }
                         catch (ConsumeException e)
                         {

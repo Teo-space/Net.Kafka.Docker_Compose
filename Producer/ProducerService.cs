@@ -30,7 +30,9 @@ namespace Producer
             using (var producer = new ProducerBuilder<string, string>(config).Build())
             {
                 var message = new Message<string, string>() { Key = "Message Key", Value = "Message Value" };
+
                 var result = await producer.ProduceAsync("Kafka-Topic-Sample1", message);
+
                 logger.LogInformation($"Produced: {result.Topic} [{result.Key} : {result.Value}] (Partition:{result.Partition.Value}, Offset:{result.Offset.Value})");
             }
         }
